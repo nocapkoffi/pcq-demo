@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Post-Quantum Cryptography Lab</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="hero">
+        <span class="badge">quantum-resistant cryptography</span>
+        <h1>Horizon</h1>
+        <p class="lead">Exploring the shift from classical RSA to lattice-based encryption.<br>What's secure today may not survive tomorrow's quantum computers.</p>
+        <button class="btn-walkthrough" id="walkthroughBtn"> Take the Guided Tour</button>
+    </div>
+
+    <div class="sandbox">
+        <!-- RSA (Classical) Card -->
+        <div class="card card--classical">
+            <div class="card__symbol" aria-hidden="true">⚙️</div>
+            <h2>RSA-2048</h2>
+            <div class="card__sub">Classical trapdoor</div>
+            
+            <div class="input-group">
+                <label for="rsaMsg">message (integer)</label>
+                <input type="number" id="rsaMsg" placeholder="e.g., 42" value="42">
+            </div>
+            
+            <div class="action-row">
+                <button class="btn btn--encrypt" id="rsaEncryptBtn">↥ encrypt</button>
+                <button class="btn btn--decrypt" id="rsaDecryptBtn">↧ decrypt</button>
+                <button class="btn btn--reset" id="rsaResetBtn">⟳ reset</button>
+            </div>
+            
+            <div class="result-panel">
+                <div class="result-label">
+                    result
+                    <span class="tooltip-icon" data-tooltip="RSA always produces the SAME ciphertext for the same message. This predictability makes it vulnerable to quantum attacks.">ⓘ</span>
+                </div>
+                <div class="result-value" id="rsaResult">—</div>
+            </div>
+            
+            <div class="encryption-history">
+                <div class="history-label">📜 encryption history</div>
+                <div class="history-items" id="rsaHistory">
+                    <span class="history-empty">no encryptions yet</span>
+                </div>
+            </div>
+            
+            <div class="footnote">
+                <span>🔓 deterministic · vulnerable to Shor's algorithm</span>
+            </div>
+        </div>
+
+        <!-- PQC (Quantum Safe) Card -->
+        <div class="card card--pqc">
+            <div class="card__symbol" aria-hidden="true">🌀</div>
+            <h2>CRYSTALS-Kyber</h2>
+            <div class="card__sub">NIST-approved lattice-based KEM</div>
+            
+            <div class="input-group">
+                <label for="pqcMsg">message (integer)</label>
+                <input type="number" id="pqcMsg" placeholder="e.g., 42" value="42">
+            </div>
+            
+            <div class="action-row">
+                <button class="btn btn--encrypt" id="pqcEncryptBtn">↥ encrypt</button>
+                <button class="btn btn--decrypt" id="pqcDecryptBtn">↧ decrypt</button>
+                <button class="btn btn--reset" id="pqcResetBtn">⟳ reset</button>
+            </div>
+            
+            <div class="result-panel">
+                <div class="result-label">
+                    result
+                    <span class="tooltip-icon" data-tooltip="PQC adds random 'noise' each encryption. Same message → different ciphertext! This randomness is what makes it quantum-resistant.">ⓘ</span>
+                </div>
+                <div class="result-value" id="pqcResult">—</div>
+            </div>
+            
+            <!-- Visual noise indicator -->
+            <div class="randomness-visual" id="noiseVisual" style="display: none;">
+                <div class="noise-label">🎲 fresh randomness injected</div>
+                <div class="noise-dots" id="noiseDots"></div>
+                <div class="noise-value" id="noiseValue"></div>
+            </div>
+            
+            <div class="encryption-history">
+                <div class="history-label">📜 encryption history (all different!)</div>
+                <div class="history-items" id="pqcHistory">
+                    <span class="history-empty">no encryptions yet</span>
+                </div>
+            </div>
+            
+            <div class="footnote">
+                <span>✨ randomized · resists quantum cryptanalysis</span>
+            </div>
+        </div>
+
+        <!-- Insight Card with Visualizations -->
+        <div class="insight-card">
+            <h3>🔬 quantum risk horizon</h3>
+            
+            <div class="risk-meter">
+                <div class="risk-label">RSA vulnerability</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-fill risk-fill--high" id="rsaRiskFill" style="width: 84%"></div>
+                </div>
+                <div class="risk-label">PQC resilience</div>
+                <div class="risk-bar-bg">
+                    <div class="risk-fill risk-fill--low" id="pqcRiskFill" style="width: 12%"></div>
+                </div>
+            </div>
+            
+            <!-- Quantum Threat Timeline -->
+            <div class="timeline">
+                <h4>⏰ quantum threat timeline</h4>
+                <div class="timeline-years">
+                    <span>2025</span>
+                    <span>2030</span>
+                    <span>2035+</span>
+                </div>
+                <div class="timeline-bar-container">
+                    <div class="timeline-bar">
+                        <div class="timeline-segment rsa-threat" style="width: 45%">RSA at risk</div>
+                        <div class="timeline-segment pqc-safe" style="width: 55%">PQC secure</div>
+                    </div>
+                </div>
+                <div class="timeline-caption">Experts predict quantum computers capable of breaking RSA by 2030-2035</div>
+            </div>
+            
+            <div class="comparison-snapshot">
+                <div class="snap-item">
+                    <strong>signature</strong>
+                    <span>RSA: deterministic</span>
+                    <span>PQC: ephemeral noise</span>
+                </div>
+                <div class="snap-item">
+                    <strong>ciphertext size</strong>
+                    <span>RSA: 256 bytes</span>
+                    <span>PQC: ~1,200 bytes</span>
+                </div>
+                <div class="snap-item">
+                    <strong>key insight</strong>
+                    <span>Shor's algorithm breaks RSA in hours</span>
+                    <span>LWE remains hard even for quantum</span>
+                </div>
+            </div>
+            
+            <div class="live-fact" id="liveFact">
+                ⚛️ quantum volume doubles every ~18 months
+            </div>
+        </div>
+    </div>
+
+    <!-- Side-by-Side Comparison Challenge -->
+    <div class="challenge-section">
+        <h3>🎮 try this: encrypt the same message multiple times</h3>
+        <div class="challenge-container">
+            <div class="challenge-card">
+                <h4>RSA (deterministic)</h4>
+                <button class="btn-challenge" id="rsaChallengeBtn">encrypt "42" three times</button>
+                <div class="challenge-results" id="rsaChallengeResults"></div>
+                <p class="challenge-note">🔒 all three results are <strong>identical</strong> → predictable!</p>
+            </div>
+            <div class="challenge-card">
+                <h4>PQC (randomized)</h4>
+                <button class="btn-challenge" id="pqcChallengeBtn">encrypt "42" three times</button>
+                <div class="challenge-results" id="pqcChallengeResults"></div>
+                <p class="challenge-note">🌀 all three results are <strong>different</strong> → quantum-resistant!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Comparison Table -->
+    <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>property</th>
+                    <th>RSA (classical)</th>
+                    <th>PQC (post-quantum)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>quantum-safe</td>
+                    <td class="danger">✗ no</td>
+                    <td class="success">✓ yes</td>
+                </tr>
+                <tr>
+                    <td>future-proof</td>
+                    <td class="danger">weak (2030+)</td>
+                    <td class="success">NIST standardized</td>
+                </tr>
+                <tr>
+                    <td>encryption style</td>
+                    <td>deterministic (same input → same output)</td>
+                    <td>probabilistic (adds random noise)</td>
+                </tr>
+                <tr>
+                    <td>ciphertext expansion</td>
+                    <td>~1x (256 bytes)</td>
+                    <td>~4-5x (1,200+ bytes)</td>
+                </tr>
+                <tr>
+                    <td>vulnerable to</td>
+                    <td>Shor's algorithm (quantum)</td>
+                    <td>no known quantum attacks</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="table-caption">Based on NIST PQC finalists (CRYSTALS-Kyber / FrodoKEM simulation)</p>
+    </div>
+
+    <!-- Walkthrough Modal (hidden by default) -->
+    <div id="walkthroughModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>🎓 Guided Tour: Understanding Post-Quantum Cryptography</h2>
+            <div class="walkthrough-step" id="step1">
+                <h3>Step 1: Try RSA encryption</h3>
+                <p>Enter a number (like 42) in the RSA box and click "encrypt". Do it twice. Notice how the result is <strong>the same both times</strong>. This is called <strong>deterministic encryption</strong>.</p>
+                <button class="btn-next" onclick="nextStep(2)">Next →</button>
+            </div>
+            <div class="walkthrough-step" id="step2" style="display: none;">
+                <h3>Step 2: Try PQC encryption</h3>
+                <p>Now enter the same number in the PQC box and click "encrypt" twice. This time, the results are <strong>different each time</strong>! PQC adds random "noise" to each encryption.</p>
+                <button class="btn-next" onclick="nextStep(3)">Next →</button>
+            </div>
+            <div class="walkthrough-step" id="step3" style="display: none;">
+                <h3>Step 3: Why does randomness matter?</h3>
+                <p>Quantum computers (like Shor's algorithm) exploit patterns. If encryption is predictable (like RSA), quantum computers can break it. PQC's randomness hides the pattern, making it quantum-resistant.</p>
+                <button class="btn-next" onclick="nextStep(4)">Next →</button>
+            </div>
+            <div class="walkthrough-step" id="step4" style="display: none;">
+                <h3>Step 4: Try the challenge</h3>
+                <p>Scroll down to the "try this" section and click both challenge buttons. See how RSA gives identical results while PQC gives unique ones. That's the future of secure encryption!</p>
+                <button class="btn-next" onclick="closeModal()">Finish Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <p>🔐 educational simulation — demonstrates the fundamental difference between deterministic and randomized encryption. Real PQC uses complex lattice math (LWE).</p>
+        <p class="footer-tip">💡 tip: hover over the ⓘ icons for explanations</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
